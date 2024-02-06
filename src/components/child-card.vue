@@ -124,7 +124,7 @@ interface Emits {
 const emits = defineEmits<Emits>()
 
 
-const list = computed<IList>({
+const list = computed<any>({
   get: () => props.modelValue,
   set: value => emits('update:modelValue', value)
 })
