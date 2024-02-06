@@ -4,7 +4,7 @@ import path from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    base: '/drag-and-drop-app/',
+    base: '/drag-and-drop-test/',
     plugins: [vue()],
     resolve: {
         alias: {
