@@ -14,7 +14,6 @@
   </main>
 </template>
 <script lang="ts" setup>
-import {useDraggable} from 'vue-draggable-plus'
 import {ref} from 'vue'
 import CardsList from "@/components/cards-list.vue";
 import {IList} from "@/types/list.types.ts";
@@ -118,11 +117,6 @@ const list = ref<IList[]>([
 
     ]
 )
-
-const el = ref()
-useDraggable(el, list, {
-  group: 'g1'
-})
 
 </script>
 <style scoped>

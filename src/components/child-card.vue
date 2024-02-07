@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'border-t' : index !== 1}" class="cursor-move">
+  <div :class="{'border-t' : index !== 1}" class="draggable-item cursor-move">
     <div class="py-4 flex items-start justify-between gap-2 ">
       <div class="min-w-[65px]">
         <p class="text-xs text-gray-400">№</p>
@@ -10,9 +10,8 @@
         <p class="text-xs text-gray-400">Название</p>
         <p class="flex w-full items-center gap-2 mt-2">
           <svg class="w-5 h-4 shrink-0 object-contain object-center text-gray-400">
-            <use :xlink:href="list.children?.length ?
-          '/assets/icons/sprites.svg#dir' :
-          '/assets/icons/sprites.svg#file'"></use>
+            <use v-if="list.children?.length" xlink:href="/assets/icons/sprites.svg#dir"></use>
+            <use v-else xlink:href="/assets/icons/sprites.svg#file"></use>
           </svg>
           <span class="truncate">
           {{ modelValue?.name }}
@@ -42,8 +41,8 @@
 
         <button
             v-if="list.children.length"
-            :class="showChildrens ? 'rotate-180 text-blue-600 bg-blue-200' : 'text-white'"
-            class="w-[32px] h-[32px] rounded-xl bg-blue-600 hover:text-blue-600 hover:bg-white border border-blue-600 inline-flex items-center justify-center"
+            :class="showChildrens ? 'rotate-180 text-blue-600 bg-blue-200' : 'bg-blue-600 text-white'"
+            class="w-[32px] h-[32px] rounded-xl hover:text-blue-600 hover:bg-white border border-blue-600 inline-flex items-center justify-center"
             @click="showChildrens = !showChildrens"
         >
           <svg class="w-5 h-4 shrink-0 object-contain object-center">
@@ -81,14 +80,6 @@
       </div>
     </div>
     <div
-        v-draggable="[
-          list?.children,
-          {
-            animation: 150,
-            ghostClass: 'bg-gray-300',
-            group: list?.name
-          }
-        ]"
         :class="showChildrens ? 'block' : 'hidden'"
         class="pl-2 border-t border-gray-300">
       <child-card
@@ -97,6 +88,11 @@
           v-model="list.children[childIndex]"
           :index="childIndex + 1"
           :parentIndex="typeof parentIndex === 'number' ? parentIndex + '.' + index : parentIndex"
+          draggable="true"
+          @dragleave="dragLeave"
+          @dragover="dragOver"
+          @dragstart="dragStart($event, childIndex)"
+          @drop="drop($event, childIndex)"
       ></child-card>
     </div>
   </div>
@@ -107,7 +103,7 @@ import {computed, ref} from 'vue';
 import {IList} from "@/types/list.types.ts";
 import {onClickOutside} from '@vueuse/core'
 import ChildCard from "@/components/child-card.vue";
-import {vDraggable} from 'vue-draggable-plus'
+import {useDraggable} from "@/composables/useDraggable.ts";
 
 interface Props {
   modelValue: IList,
@@ -137,6 +133,17 @@ const showChildrens = ref(false)
 const elementRef = ref(null);
 
 onClickOutside(elementRef, () => showActions.value = false)
+
+const children = computed({
+  get: () => list.value.children,
+  set: (newChildren) => {
+    list.value.children = newChildren;
+    emits('update:modelValue', list.value);
+  }
+});
+
+const {dragStart, dragOver, drop, dragLeave} = useDraggable(children);
+
 </script>
 <style scoped>
 </style>

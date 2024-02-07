@@ -15,3 +15,16 @@ body {
     font-size: 16px;
     font-weight: 500;
 }
+
+.draggable-item {
+    transition: all 0.3s ease;
+}
+
+.draggable-item.dragging {
+    background: #e7e7e7;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+}
+
+.placeholder {
+    background-color: #f2ffff;
+}
