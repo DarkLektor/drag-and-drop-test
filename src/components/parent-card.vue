@@ -83,18 +83,20 @@
         :class="showChildrens ? 'block' : 'hidden'"
         class="pr-8 pl-11 border-t border-gray-300"
     >
-      <child-card
-          v-for="(child, childIndex) in list.children"
-          :key="child.name"
-          v-model="list.children[childIndex]"
-          :index="childIndex + 1"
-          :parentIndex="index"
-          draggable="true"
-          @dragleave="dragLeave"
-          @dragover="dragOver"
-          @dragstart="dragStart($event, childIndex)"
-          @drop="drop($event, childIndex)"
-      ></child-card>
+      <transition-group name="list-change" tag="div">
+        <child-card
+            v-for="(child, childIndex) in list.children"
+            :key="child.name"
+            v-model="list.children[childIndex]"
+            :index="childIndex + 1"
+            :parentIndex="index"
+            draggable="true"
+            @dragleave="dragLeave"
+            @dragover="dragOver"
+            @dragstart="dragStart($event, childIndex)"
+            @drop="drop($event, childIndex)"
+        ></child-card>
+      </transition-group>
     </div>
   </div>
 </template>

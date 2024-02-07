@@ -28,3 +28,7 @@ body {
 .placeholder {
     background-color: #f2ffff;
 }
+
+.list-change-move {
+    transition: transform 0.3s ease;
+}

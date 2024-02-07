@@ -2,16 +2,18 @@
   <div
       class="pt-10"
   >
-    <parent-card
-        v-for="(item, index) in list"
-        :key="item.name"
-        v-model="list[index]"
-        :index="index + 1"
-        draggable="true"
-        @dragover="dragOver"
-        @dragstart="dragStart($event, index)"
-        @drop="drop($event, index)"
-    />
+    <transition-group name="list-change" tag="div">
+      <parent-card
+          v-for="(item, index) in list"
+          :key="item.name"
+          v-model="list[index]"
+          :index="index + 1"
+          draggable="true"
+          @dragover="dragOver"
+          @dragstart="dragStart($event, index)"
+          @drop="drop($event, index)"
+      />
+    </transition-group>
   </div>
 </template>
 <script lang="ts" setup>
@@ -40,3 +42,4 @@ const {dragStart, dragOver, drop} = useDraggable(list);
 </script>
 <style scoped>
 </style>
+
