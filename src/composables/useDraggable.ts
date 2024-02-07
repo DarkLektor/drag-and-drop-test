@@ -46,7 +46,7 @@ export function useDraggable(list: Ref<IList[]> | IList[]) {
         currentDraggingElement?.classList.remove('dragging');
         currentDraggingElement = null;
         document.querySelectorAll('.placeholder').forEach(el => el.classList.remove('placeholder'));
-        (event.currentTarget as HTMLElement).classList.remove('placeholder');
+        document.querySelectorAll('.dragging').forEach(el => el.classList.remove('dragging'));
         updateList(draggingIndex.value, index);
         draggingIndex.value = -1;
     };
